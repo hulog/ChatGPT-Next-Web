@@ -18,12 +18,14 @@ export async function requestOpenai(req: NextRequest) {
     baseUrl = `${PROTOCOL}://${baseUrl}`;
   }
 
-  console.log("[Proxy] ", openaiPath);
+  console.log("[Path] ", openaiPath);
   console.log("[Base Url]", baseUrl);
 
   if (process.env.OPENAI_ORG_ID) {
     console.log("[Org ID]", process.env.OPENAI_ORG_ID);
   }
+  const payload = await req.text();
+  console.log("[Request] ", JSON.parse(payload)["messages"]);
 
   if (!authValue || !authValue.startsWith("Bearer sk-")) {
     console.error("[OpenAI Request] invalid api key provided", authValue);
@@ -39,6 +41,6 @@ export async function requestOpenai(req: NextRequest) {
     },
     cache: "no-store",
     method: req.method,
-    body: req.body,
+    body: payload,
   });
 }
