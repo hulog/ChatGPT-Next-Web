@@ -34,11 +34,11 @@ export function auth(req: NextRequest) {
 
   const hashedCode = md5.hash(accessCode ?? "").trim();
 
-  console.log("[Auth] allowed hashed codes: ", [...serverConfig.codes]);
-  console.log("[Auth] got access code:", accessCode);
-  console.log("[Auth] hashed access code:", hashedCode);
-  console.log("[User IP] ", getIP(req));
-  console.log("[Time] ", new Date().toLocaleString());
+  console.log({
+    time: new Date().toLocaleString(),
+    ip: getIP(req),
+    accessCode,
+  });
 
   if (serverConfig.needCode && !serverConfig.codes.has(hashedCode) && !token) {
     return {
