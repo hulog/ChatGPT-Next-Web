@@ -5,7 +5,8 @@ import SendWhiteIcon from "../icons/send-white.svg";
 import BrainIcon from "../icons/brain.svg";
 import RenameIcon from "../icons/rename.svg";
 import ExportIcon from "../icons/share.svg";
-import ReturnIcon from "../icons/return.svg";
+import MenuIcon from "../icons/menu.svg";
+import ClearIcon from "../icons/clear.svg";
 import CopyIcon from "../icons/copy.svg";
 import DownloadIcon from "../icons/download.svg";
 import LoadingIcon from "../icons/three-dots.svg";
@@ -316,6 +317,7 @@ export function ChatActions(props: {
   hitBottom: boolean;
 }) {
   const config = useAppConfig();
+  const chatStore = useChatStore();
   const navigate = useNavigate();
 
   // switch themes
@@ -386,6 +388,13 @@ export function ChatActions(props: {
         }}
       >
         <MaskIcon />
+      </div>
+
+      <div
+        className={`${chatStyle["chat-input-action"]} clickable`}
+        onClick={() => chatStore.resetSession()}
+      >
+        <ClearIcon />
       </div>
     </div>
   );
@@ -459,14 +468,14 @@ export function Chat() {
   const SEARCH_TEXT_LIMIT = 30;
   const onInput = (text: string) => {
     setUserInput(text);
-    const n = text.trim().length;
+    const n = text.length;
 
     // clear search results
     if (n === 0) {
       setPromptHints([]);
     } else if (!config.disablePromptHint && n < SEARCH_TEXT_LIMIT) {
       // check if need to trigger auto completion
-      if (text.startsWith("/")) {
+      if (text.startsWith("/") || text.startsWith(" ")) {
         let searchText = text.slice(1);
         onSearch(searchText);
       }
@@ -636,7 +645,7 @@ export function Chat() {
         <div className="window-actions">
           <div className={"window-action-button" + " " + styles.mobile}>
             <IconButton
-              icon={<ReturnIcon />}
+              icon={<MenuIcon />}
               bordered
               title={Locale.Chat.Actions.ChatList}
               onClick={() => navigate(Path.Home)}
@@ -814,7 +823,6 @@ export function Chat() {
           />
           <IconButton
             icon={<SendWhiteIcon />}
-            text={Locale.Chat.Send}
             className={styles["chat-input-send"]}
             type="primary"
             onClick={() => doSubmit(userInput)}
