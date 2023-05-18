@@ -27,6 +27,10 @@ export async function requestOpenai(req: NextRequest) {
   const payload = await req.text();
   console.log("[Request] ", JSON.parse(payload)["messages"]);
 
+  if (!authValue || !authValue.startsWith("Bearer sk-")) {
+    console.error("[OpenAI Request] invalid api key provided", authValue);
+  }
+
   return fetch(`${baseUrl}/${openaiPath}`, {
     headers: {
       "Content-Type": "application/json",
