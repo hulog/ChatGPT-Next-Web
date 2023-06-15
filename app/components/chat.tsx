@@ -447,11 +447,6 @@ export function ChatActions(props: {
           });
         }}
       />
-      <ChatAction
-        text={"清除当前对话内容"}
-        icon={<ClearIcon />}
-        onClick={() => chatStore.resetSession()}
-      />
     </div>
   );
 }
