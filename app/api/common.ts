@@ -49,6 +49,8 @@ export async function requestOpenai(req: NextRequest) {
     cache: "no-store",
     method: req.method,
     body: payload,
+    // @ts-ignore
+    duplex: "half",
     signal: controller.signal,
   };
 
